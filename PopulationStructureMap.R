@@ -1,12 +1,32 @@
 #code https://www.r-bloggers.com/2018/08/how-to-quickly-enrich-a-map-with-natural-and-anthropic-details/
 #La parte de "Add elevation details"
 
-setwd("C:\Users\Savydeviljho\Desktop\Cartogratree Development 2022\Population structure layer CartograPlant")
+setwd("C:\Users\Savydeviljho\Desktop\Cartogratree Development 2022\Population structure layer CartograPlant\Population structure layer CartograPlant")
+
+#takes file and returns read.table value
+createPopulation<- function(populationFile){
+  population<-read.table(populationFile)
+  return(population)
+}
+
+#takes file and returns read.csv value
+createLocation <- function(locationFile){
+  location<-read.csv(locationFile)
+  return(location)
+}
 
 #hard coded version
 #location<-read.csv("TGDR372_Plant_Accession_Populus_trichocarpa_0.csv")
 location<-createLocation("TGDR372_Plant_Accession_Populus_trichocarpa_0.csv")
 location2<-location[,c(1,4,5)]
+
+#creating latitude and longitude columns
+latCol<-location[,c(4)]
+longCol<-location[,c(5)]
+
+#finding max and min values of the latitude and longitude columns to give a range for the 
+latitude<-max(latCol$col1) + 10
+longitude<-min(longCol$col1) + 10 
 
 
 #hard coded version
@@ -21,6 +41,7 @@ locpop<-merge(population2,location2)
 locpop$Population<-as.character(locpop$Population)
 
 #install.packages("raster")
+library(maps)
 library(raster)
 #install.packages("tidyverse")
 library(tidyverse)
@@ -37,7 +58,7 @@ library(ggspatial)
 
 mapa_mundo <- map_data("world")
 
-dem.raster <- getData("SRTM", lat = 50.71, lon = -130.97, download = TRUE)#needs changed, 
+dem.raster <- getData("SRTM", lat = latitude, lon = longitude, download = TRUE)#needs changed, 
 dem.m  <-  rasterToPoints(dem.raster)
 dem.df <-  data.frame(dem.m)
 colnames(dem.df) = c("lon", "lat", "alt")
@@ -92,15 +113,3 @@ head(obj)
 str(obj)
 writePointsShape(obj,"Panel1PopulationStructure.shp")
 
-
-#takes file and returns read.table value
-createPopulation<- function(populationFile){
-  population<-read.table(populationFile)
-  return(population)
-}
-
-#takes file and returns read.csv value
-createLocation <- function(locationFile){
-  location<-read.csv(locationFile)
-  return(location)
-}
