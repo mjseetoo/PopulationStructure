@@ -14,19 +14,19 @@ locpop<-merge(population2,location2)
 
 locpop$Population<-as.character(locpop$Population)
 
-install.packages("raster")
+#install.packages("raster")
 library(raster)
-install.packages("tidyverse")
+#install.packages("tidyverse")
 library(tidyverse)
-install.packages("mapdata")
+#install.packages("mapdata")
 library(mapdata)
 library(ggplot2)
 library(maps)
-install.packages("ggrepel")
+#install.packages("ggrepel")
 library(ggrepel)
-install.packages("ggthemes")
+#install.packages("ggthemes")
 library(ggthemes)
-install.packages("ggspatial")
+#install.packages("ggspatial")
 library(ggspatial)
 
 mapa_mundo <- map_data("world")
@@ -38,6 +38,7 @@ colnames(dem.df) = c("lon", "lat", "alt")
 
 options(scipen = 999) # para evitar la anotación científica 
 
+color_list <- list("green", "purple", "red") # find way to expand possible colors
 
 
 #altitud en escala continua de n valores: scale_fill_gradientn
@@ -54,7 +55,7 @@ mapa_mundo %>%
   coord_fixed(xlim= c(-153.61, -118.01),
               ylim= c(37.43,62.03),
               ratio= 1.1)+
-  scale_color_manual(values = c( "green", "blue", "red"), name = " ") + 
+  scale_color_manual(values = c(color_list), name = " ") + 
   scale_shape_discrete(solid=T)+
   annotation_scale() +
   annotation_north_arrow(location='tr')
@@ -85,3 +86,4 @@ dim(obj)
 head(obj)
 str(obj)
 writePointsShape(obj,"Panel1PopulationStructure.shp")
+
