@@ -3,10 +3,17 @@
 
 setwd("C:/Users/zelda/OneDrive/Desktop/Population structure layer CartograPlant")
 
-location<-read.csv("TGDR372_Plant_Accession_Populus_trichocarpa_0.csv")
+args = commandArgs(trailingOnly=TRUE)
+
+
+#location<-read.csv("TGDR372_Plant_Accession_Populus_trichocarpa_0.csv") args1
+location<-read.csv(args[1])
+
 location2<-location[,c(1,4,5)]
 
- population<-read.table("assignedPopPanel1final.txt")
+#population<-read.table("assignedPopPanel1final.txt") args 2 
+population<-read.table(args[2])
+
 population2<-population[,c(2,4)]
 colnames(population2)<-c("Plant.Identifier","Population")
 dim(population2)
@@ -38,7 +45,7 @@ colnames(dem.df) = c("lon", "lat", "alt")
 
 options(scipen = 999) # para evitar la anotación científica 
 
-color_list <- list("green", "purple", "red") # find way to expand possible colors
+color_list <- list("green", "purple", "red", "blue", "orange") # find way to expand possible colors
 
 
 #altitud en escala continua de n valores: scale_fill_gradientn
@@ -87,3 +94,4 @@ head(obj)
 str(obj)
 writePointsShape(obj,"Panel1PopulationStructure.shp")
 
+print("Task executed sucessfully")
